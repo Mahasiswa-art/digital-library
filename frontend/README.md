@@ -1,5 +1,29 @@
-# Vue 3 + Vite
+digital-library/
+├── backend/                  # Laravel Backend
+│   ├── app/                  # Code Laravel (Models, Controllers, etc.)
+│   ├── bootstrap/
+│   ├── config/
+│   ├── database/             # Migration & Seeder
+│   ├── public/               # Public assets
+│   ├── resources/            # Views, lang, Vue template (if blade)
+│   ├── routes/               # API & Web routes
+│   ├── storage/
+│   ├── tests/
+│   ├── .env.example          # Template environment file
+│   ├── composer.json
+│   ├── artisan
+│   └── README.md             # Dokumentasi backend
+│
+├── frontend/                 # Vue Frontend
+│   ├── src/
+│   │   ├── components/
+│   │   ├── views/
+│   │   ├── router/
+│   │   └── main.js
+│   ├── public/
+│   ├── package.json
+│   ├── vite.config.js
+│   └── README.md             # Dokumentasi frontend (opsional)
+│
+└── README.md                 # Dokumentasi utama proyek (gabungan backend + frontend)
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
