@@ -10,8 +10,18 @@ class MemberSeeder extends Seeder
     public function run(): void
     {
         DB::table('members')->insert([
-            ['name' => 'Ali', 'email' => 'ali@mail.com', 'phone' => '081234567'],
-            ['name' => 'Budi', 'email' => 'budi@mail.com', 'phone' => '081987654'],
+            [
+                'name' => 'Ali',
+                'email' => 'ali@mail.com',
+                'phone' => '081234567',
+                'address' => 'Jakarta',
+            ],
+            [
+                'name' => 'Budi',
+                'email' => 'budi@mail.com',
+                'phone' => '081987654',
+                'address' => 'Bandung',
+            ],
         ]);
     }
 }

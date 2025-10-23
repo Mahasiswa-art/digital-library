@@ -15,13 +15,9 @@ return new class extends Migration
             $table->foreignId('member_id')->constrained('members')->onDelete('cascade');
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
 
-            // kolom tanggal peminjaman dan pengembalian
+            // kolom tambahan
             $table->date('loan_date');
             $table->date('return_date')->nullable();
-
-            // status pinjaman
-            $table->enum('status', ['borrowed', 'returned'])->default('borrowed');
-
             $table->timestamps();
         });
     }
