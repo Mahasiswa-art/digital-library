@@ -2,73 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Publisher;
+use Illuminate\Http\Request;
 
 class PublisherController extends Controller
 {
-    // 🔹 GET /api/publishers → ambil semua data penerbit
     public function index()
     {
         return response()->json(Publisher::all(), 200);
     }
 
-    // 🔹 POST /api/publishers → tambah data penerbit baru
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
             'address' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:20',
         ]);
 
-        $publisher = Publisher::create($validatedData);
-        return response()->json($publisher, 201);
+        $publisher = Publisher::create($validated);
+        return response()->json(['message' => 'Publisher created', 'data' => $publisher], 201);
     }
 
-    // 🔹 GET /api/publishers/{id} → ambil satu data penerbit
     public function show($id)
     {
         $publisher = Publisher::find($id);
-
-        if (!$publisher) {
-            return response()->json(['message' => 'Publisher not found'], 404);
-        }
-
-        return response()->json($publisher);
+        if (!$publisher) return response()->json(['message' => 'Publisher not found'], 404);
+        return response()->json($publisher, 200);
     }
 
-    // 🔹 PUT/PATCH /api/publishers/{id} → update data penerbit
     public function update(Request $request, $id)
     {
         $publisher = Publisher::find($id);
+        if (!$publisher) return response()->json(['message' => 'Publisher not found'], 404);
 
-        if (!$publisher) {
-            return response()->json(['message' => 'Publisher not found'], 404);
-        }
-
-        $validatedData = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:100',
             'address' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:20',
         ]);
 
-        $publisher->update($validatedData);
-        return response()->json($publisher);
+        $publisher->update($validated);
+        return response()->json(['message' => 'Publisher updated', 'data' => $publisher], 200);
     }
 
-    // 🔹 DELETE /api/publishers/{id} → hapus data penerbit
     public function destroy($id)
     {
         $publisher = Publisher::find($id);
-
-        if (!$publisher) {
-            return response()->json(['message' => 'Publisher not found'], 404);
-        }
+        if (!$publisher) return response()->json(['message' => 'Publisher not found'], 404);
 
         $publisher->delete();
-        return response()->json(['message' => 'Publisher deleted successfully']);
+        return response()->json(['message' => 'Publisher deleted'], 200);
     }
 }

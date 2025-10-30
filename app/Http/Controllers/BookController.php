@@ -2,68 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Book;
+use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
     public function index()
     {
-        return response()->json(Book::all());
+        return response()->json(Book::all(), 200);
     }
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
-            'publisher' => 'nullable|string|max:255',
+        $validated = $request->validate([
+            'title' => 'required|string|max:150',
+            'author_id' => 'required|exists:authors,id',
+            'publisher_id' => 'required|exists:publishers,id',
             'year' => 'nullable|integer',
-            'isbn' => 'nullable|string|max:255',
-            'stock' => 'nullable|integer|min:0',
+            'isbn' => 'nullable|string|unique:books',
         ]);
 
-        $book = Book::create($validatedData);
-        return response()->json($book, 201);
+        $book = Book::create($validated);
+        return response()->json(['message' => 'Book created', 'data' => $book], 201);
     }
 
     public function show($id)
     {
         $book = Book::find($id);
-        if (!$book) {
-            return response()->json(['message' => 'Book not found'], 404);
-        }
-        return response()->json($book);
+        if (!$book) return response()->json(['message' => 'Book not found'], 404);
+        return response()->json($book, 200);
     }
 
     public function update(Request $request, $id)
     {
         $book = Book::find($id);
-        if (!$book) {
-            return response()->json(['message' => 'Book not found'], 404);
-        }
+        if (!$book) return response()->json(['message' => 'Book not found'], 404);
 
-        $validatedData = $request->validate([
-            'title' => 'sometimes|required|string|max:255',
-            'author' => 'sometimes|required|string|max:255',
-            'publisher' => 'nullable|string|max:255',
+        $validated = $request->validate([
+            'title' => 'sometimes|string|max:150',
+            'author_id' => 'sometimes|exists:authors,id',
+            'publisher_id' => 'sometimes|exists:publishers,id',
             'year' => 'nullable|integer',
-            'isbn' => 'nullable|string|max:255',
-            'stock' => 'nullable|integer|min:0',
+            'isbn' => 'nullable|string|unique:books,isbn,' . $id,
         ]);
 
-        $book->update($validatedData);
-        return response()->json($book);
+        $book->update($validated);
+        return response()->json(['message' => 'Book updated', 'data' => $book], 200);
     }
 
     public function destroy($id)
     {
         $book = Book::find($id);
-        if (!$book) {
-            return response()->json(['message' => 'Book not found'], 404);
-        }
+        if (!$book) return response()->json(['message' => 'Book not found'], 404);
 
         $book->delete();
-        return response()->json(['message' => 'Book deleted successfully']);
+        return response()->json(['message' => 'Book deleted'], 200);
     }
 }
